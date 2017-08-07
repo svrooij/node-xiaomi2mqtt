@@ -1,0 +1,29 @@
+{
+  "name": "xiaomi2mqtt",
+  "version": "0.1.0",
+  "description": "A bridge between the Xiaomi home-automation gateway and a MQTT server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svrooij/xiaomi2mqtt.git"
+  },
+  "keywords": [
+    "mqtt",
+    "xiaomi",
+    "home automation",
+    "mqtt-smarthome"
+  ],
+  "author": "Stephan van Rooij <github@svrooij.nl> (https://svrooij.nl)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/svrooij/xiaomi2mqtt/issues"
+  },
+  "homepage": "https://github.com/svrooij/xiaomi2mqtt#readme",
+  "dependencies": {
+    "config": "^1.26.1",
+    "mqtt": "^2.11.0"
+  }
+}
