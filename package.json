@@ -24,6 +24,7 @@
   "homepage": "https://github.com/svrooij/xiaomi2mqtt#readme",
   "dependencies": {
     "config": "^1.26.1",
+    "lumi-aqara": "^1.0.0",
     "mqtt": "^2.11.0"
   }
 }
