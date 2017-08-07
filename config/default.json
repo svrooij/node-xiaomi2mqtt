@@ -1,0 +1,12 @@
+{
+  "mqtt": {
+    "host":null,
+    "user":null,
+    "password":null,
+    "secure":false,
+    "topic":"xiaomi/"
+  },
+  "gateway":{
+      "password": ""
+  }
+}
