@@ -109,7 +109,7 @@ aqara.on('gateway', (gateway) => {
     switch (device.getType()) {
       case 'magnet':
         //console.log(`  Magnet (${device.isOpen() ? 'open' : 'close'})`)
-        publishDeviceData(device, `${device.isOpen() ? 'open' : 'close'}`)
+        publishDeviceData(device, `${device.isOpen() ? 'open' : 'closed'}`)
         device.on('open', () => {
           //console.log(`${device.getSid()} is now open`)
           publishDeviceData(device, 'open')
