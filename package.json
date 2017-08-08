@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/svrooij/xiaomi2mqtt.git"
+    "url": "git+https://github.com/svrooij/node-xiaomi2mqtt.git"
   },
   "keywords": [
     "mqtt",
@@ -19,9 +19,9 @@
   "author": "Stephan van Rooij <github@svrooij.nl> (https://svrooij.nl)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/svrooij/xiaomi2mqtt/issues"
+    "url": "https://github.com/svrooij/node-xiaomi2mqtt/issues"
   },
-  "homepage": "https://github.com/svrooij/xiaomi2mqtt#readme",
+  "homepage": "https://github.com/svrooij/node-xiaomi2mqtt#readme",
   "dependencies": {
     "config": "^1.26.1",
     "lumi-aqara": "^1.0.0",
