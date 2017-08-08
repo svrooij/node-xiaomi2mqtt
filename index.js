@@ -111,11 +111,11 @@ aqara.on('gateway', (gateway) => {
         //console.log(`  Magnet (${device.isOpen() ? 'open' : 'close'})`)
         publishDeviceData(device, `${device.isOpen() ? 'open' : 'close'}`)
         device.on('open', () => {
-          console.debug(`${device.getSid()} is now open`)
+          //console.log(`${device.getSid()} is now open`)
           publishDeviceData(device, 'open')
         })
         device.on('close', () => {
-          console.debug(`${device.getSid()} is now close`)
+          //console.log(`${device.getSid()} is now close`)
           publishDeviceData(device, 'closed')
         })
         break
@@ -123,19 +123,19 @@ aqara.on('gateway', (gateway) => {
         //console.log(`  Switch`)
         publishDeviceData(device, 'unknown')
         device.on('click', () => {
-          console.debug(`${device.getSid()} is clicked`)
+          //console.log(`${device.getSid()} is clicked`)
           publishDeviceData(device, 'clicked')
         })
         device.on('doubleClick', () => {
-          console.debug(`${device.getSid()} is double clicked`)
+          //console.log(`${device.getSid()} is double clicked`)
           publishDeviceData(device, 'doubleClicked')
         })
         device.on('longClickPress', () => {
-          console.debug(`${device.getSid()} is long pressed`)
+          //console.log(`${device.getSid()} is long pressed`)
           publishDeviceData(device, 'pressed')
         })
         device.on('longClickRelease', () => {
-          console.debug(`${device.getSid()} is long released`)
+          //console.log(`${device.getSid()} is long released`)
           publishDeviceData(device, 'released')
         })
         break
