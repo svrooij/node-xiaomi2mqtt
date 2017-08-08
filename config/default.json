@@ -7,6 +7,9 @@
     "topic":"xiaomi/"
   },
   "gateway":{
-      "password": ""
+      "password": "",
+      "devices": {
+        "device_sid":"Friendly Name"
+      }
   }
 }
