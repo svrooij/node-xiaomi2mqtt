@@ -1,6 +1,6 @@
 {
   "mqtt": {
-    "host":null,
+    "host":"mqtt://127.0.0.1:1883",
     "user":null,
     "password":null,
     "secure":false,
