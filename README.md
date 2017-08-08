@@ -62,7 +62,7 @@ The gateway also needs to have Local network mode enabled. This can be done from
 You would typically run this app in the background, but first you have to configure it. You should first install [Node.JS](https://nodejs.org/en/download/).
 
 ```bash
-git clone https://github.com/svrooij/xiaomi2mqtt.git
+git clone https://github.com/svrooij/node-xiaomi2mqtt.git
 cd xiaomi2mqtt
 npm install
 nano config/local.json
