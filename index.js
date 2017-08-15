@@ -36,16 +36,16 @@ mqttClient.on('message', (topic, message) => {
 })
 
 function handleGatewayLightUpdate (message) {
-    if(!lastGateway) return
+  if (!lastGateway) return
     // TODO send message to gateway.
   console.log('Updating gateway light')
-  if(IsNumeric(message)){
-      var value = parseInt(message);
-      if(value >=0 && value <= 100){
-          lastGateway.setIntensity(value);
-      } else {
-          console.warning(`Value: ${value} not valid intensity!`)
-      }
+  if (IsNumeric(message)) {
+    var value = parseInt(message)
+    if (value >= 0 && value <= 100) {
+      lastGateway.setIntensity(value)
+    } else {
+      console.warning(`Value: ${value} not valid intensity!`)
+    }
   } else { // Not numeric
     const data = JSON.parse(message)
     // TODO do something with the data.
@@ -66,7 +66,7 @@ function publishConnectionStatus () {
 function publishDeviceData (device, newState) {
   const data = {
     val: newState, // Using val according to the MQTT Smarthome specs. State will be removed soon.
-    state: newState, 
+    state: newState,
     battery: Math.round(device.getBatteryPercentage()),
     name: getFriendlyName(device.getSid()),
     ts: Date.now()
@@ -78,8 +78,6 @@ function publishDeviceData (device, newState) {
         {qos: 0, retain: true}
     )
 }
-
-
 
 // ******* Gateway stuff from here ******
 var lastGateway = null
@@ -109,34 +107,34 @@ aqara.on('gateway', (gateway) => {
     // console.log(`  SID: ${device.getSid()}`)
     switch (device.getType()) {
       case 'magnet':
-        //console.log(`  Magnet (${device.isOpen() ? 'open' : 'close'})`)
+        // console.log(`  Magnet (${device.isOpen() ? 'open' : 'close'})`)
         publishDeviceData(device, `${device.isOpen() ? 'open' : 'closed'}`)
         device.on('open', () => {
-          //console.log(`${device.getSid()} is now open`)
+          // console.log(`${device.getSid()} is now open`)
           publishDeviceData(device, 'open')
         })
         device.on('close', () => {
-          //console.log(`${device.getSid()} is now close`)
+          // console.log(`${device.getSid()} is now close`)
           publishDeviceData(device, 'closed')
         })
         break
       case 'switch':
-        //console.log(`  Switch`)
+        // console.log(`  Switch`)
         publishDeviceData(device, 'unknown')
         device.on('click', () => {
-          //console.log(`${device.getSid()} is clicked`)
+          // console.log(`${device.getSid()} is clicked`)
           publishDeviceData(device, 'clicked')
         })
         device.on('doubleClick', () => {
-          //console.log(`${device.getSid()} is double clicked`)
+          // console.log(`${device.getSid()} is double clicked`)
           publishDeviceData(device, 'doubleClicked')
         })
         device.on('longClickPress', () => {
-          //console.log(`${device.getSid()} is long pressed`)
+          // console.log(`${device.getSid()} is long pressed`)
           publishDeviceData(device, 'pressed')
         })
         device.on('longClickRelease', () => {
-          //console.log(`${device.getSid()} is long released`)
+          // console.log(`${device.getSid()} is long released`)
           publishDeviceData(device, 'released')
         })
         break
@@ -157,11 +155,11 @@ aqara.on('gateway', (gateway) => {
 
 // Usefull function
 function IsNumeric (val) {
-  return Number(parseFloat(val)) == val
+  return Number(parseFloat(val)) === val
 }
 
-function getFriendlyName(deviceId){
-  if(gatewayConfig.devices && gatewayConfig.devices[deviceId]){
+function getFriendlyName (deviceId) {
+  if (gatewayConfig.devices && gatewayConfig.devices[deviceId]) {
     return gatewayConfig.devices[deviceId]
   }
   return null
