@@ -65,7 +65,8 @@ function publishConnectionStatus () {
 
 function publishDeviceData (device, newState) {
   const data = {
-    state: newState,
+    val: newState, // Using val according to the MQTT Smarthome specs. State will be removed soon.
+    state: newState, 
     battery: Math.round(device.getBatteryPercentage()),
     name: getFriendlyName(device.getSid()),
     ts: Date.now()

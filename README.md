@@ -23,7 +23,8 @@ This bridge uses the `xiaomi/connected` topic to send retained connection messag
 The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields.
 
 - `name` If you defined a name in the config
-- `state` current state of the device. (open/closed) for magnets. (clicked/doubleClicked/pressed/released) for buttons.
+- `val` current state of the device. (open/closed) for magnets. (clicked/doubleClicked/pressed/released) for buttons.
+- `state` also contains the state, but shouldn't be used anymore and will be removed soon.
 - `ts` timestamp of last update.
 
 Each status message is retained, so if you subscribe after a status message, you will always get the last status.
