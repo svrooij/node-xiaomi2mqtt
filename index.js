@@ -151,7 +151,6 @@ aqara.on('gateway', (gateway) => {
         })
         break
       case 'motion':
-        console.log(`  Motion (${device.hasMotion() ? 'motion' : 'no motion'})`)
         publishDeviceData(device, `(${device.hasMotion() ? 'motion' : 'no_motion'})`)
         device.on('motion', () => {
           publishDeviceData(device, 'motion')
