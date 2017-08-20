@@ -1,6 +1,6 @@
 const config = require('config')
 const mqtt = require('mqtt')
-const Aqara = require('lumi-aqara')
+const Aqara = require('@svrooij/lumi-aqara')
 
 // First setup the mqtt client.
 const mqttConfig = config.get('mqtt')
