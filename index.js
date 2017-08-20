@@ -91,6 +91,26 @@ function publishMagnetState (device, newState) {
   publishDeviceData(device, newState)
 }
 
+function publishHTSensor (sensorDevice) {
+  const tempTopic = `${mqttConfig.topic}status/temperature/${sensorDevice.getSid()}`
+  const humTopic = `${mqttConfig.topic}status/humidity/${sensorDevice.getSid()}`
+  let data = {
+    val: sensorDevice.getTemperature(),
+    battery: Math.round(sensorDevice.getBatteryPercentage()),
+    name: getFriendlyName(sensorDevice.getSid()),
+    ts: Date.now()
+  }
+  mqttClient.publish(tempTopic,
+    JSON.stringify(data),
+    {qos: 0, retain: true}
+  )
+  data.val = sensorDevice.getHumidity()
+  mqttClient.publish(humTopic,
+    JSON.stringify(data),
+    {qos: 0, retain: true}
+  )
+}
+
 // ******* Gateway stuff from here ******
 var lastGateway = null
 const gatewayConfig = config.get('gateway')
@@ -158,6 +178,12 @@ aqara.on('gateway', (gateway) => {
         device.on('noMotion', () => {
           publishDeviceData(device, 'no_motion', device.getSecondsSinceMotion())
           // console.log(`${device.getSid()} has no motion (${device.getSecondsSinceMotion()})`)
+        })
+        break
+      case 'sensor':
+        publishHTSensor(device)
+        device.on('update', () => {
+          publishHTSensor(device)
         })
         break
     }
