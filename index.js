@@ -63,14 +63,15 @@ function publishConnectionStatus () {
   })
 }
 
-function publishDeviceData (device, newState) {
-  const data = {
+function publishDeviceData (device, newState, secSinceMotion = 0) {
+  let data = {
     val: newState, // Using val according to the MQTT Smarthome specs. State will be removed soon.
     state: newState,
     battery: Math.round(device.getBatteryPercentage()),
     name: getFriendlyName(device.getSid()),
     ts: Date.now()
   }
+  if (secSinceMotion > 0) { data.secondsSinceMotion = secSinceMotion }
   var topic = `${mqttConfig.topic}status/${device.getType()}/${device.getSid()}`
   console.log(`Publishing ${newState} to ${topic}`)
   mqttClient.publish(topic,
@@ -80,11 +81,11 @@ function publishDeviceData (device, newState) {
 }
 
 let magnets = []
-function publishMagnetState(device, newState) {
-  const magnet = magnets.find(function (m) {return m.id === device.getSid()})
-  if(!magnet) {
-    magnets.push({id: device.getSid(),state: newState})
-  } else if(magnet.state === newState) {
+function publishMagnetState (device, newState) {
+  const magnet = magnets.find(function (m) { return m.id === device.getSid() })
+  if (!magnet) {
+    magnets.push({id: device.getSid(), state: newState})
+  } else if (magnet.state === newState) {
     return
   }
   publishDeviceData(device, newState)
@@ -147,6 +148,17 @@ aqara.on('gateway', (gateway) => {
         device.on('longClickRelease', () => {
           // console.log(`${device.getSid()} is long released`)
           publishDeviceData(device, 'released')
+        })
+        break
+      case 'motion':
+        console.log(`  Motion (${device.hasMotion() ? 'motion' : 'no motion'})`)
+        publishDeviceData(device, `(${device.hasMotion() ? 'motion' : 'no_motion'})`)
+        device.on('motion', () => {
+          publishDeviceData(device, 'motion')
+        })
+        device.on('noMotion', () => {
+          publishDeviceData(device, 'no_motion', device.getSecondsSinceMotion())
+          // console.log(`${device.getSid()} has no motion (${device.getSecondsSinceMotion()})`)
         })
         break
     }
