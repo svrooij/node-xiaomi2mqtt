@@ -79,6 +79,17 @@ function publishDeviceData (device, newState) {
     )
 }
 
+let magnets = []
+function publishMagnetState(device, newState) {
+  const magnet = magnets.find(function (m) {return m.id === device.getSid()})
+  if(!magnet) {
+    magnets.push({id: device.getSid(),state: newState})
+  } else if(magnet.state === newState) {
+    return
+  }
+  publishDeviceData(device, newState)
+}
+
 // ******* Gateway stuff from here ******
 var lastGateway = null
 const gatewayConfig = config.get('gateway')
@@ -108,14 +119,14 @@ aqara.on('gateway', (gateway) => {
     switch (device.getType()) {
       case 'magnet':
         // console.log(`  Magnet (${device.isOpen() ? 'open' : 'close'})`)
-        publishDeviceData(device, `${device.isOpen() ? 'open' : 'closed'}`)
+        publishMagnetState(device, `${device.isOpen() ? 'open' : 'closed'}`)
         device.on('open', () => {
           // console.log(`${device.getSid()} is now open`)
-          publishDeviceData(device, 'open')
+          publishMagnetState(device, 'open')
         })
         device.on('close', () => {
           // console.log(`${device.getSid()} is now close`)
-          publishDeviceData(device, 'closed')
+          publishMagnetState(device, 'closed')
         })
         break
       case 'switch':
