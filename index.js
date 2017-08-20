@@ -159,7 +159,7 @@ aqara.on('gateway', (gateway) => {
         })
         device.on('doubleClick', () => {
           // console.log(`${device.getSid()} is double clicked`)
-          publishDeviceData(device, 'doubleClicked')
+          publishDeviceData(device, 'double_clicked')
         })
         device.on('longClickPress', () => {
           // console.log(`${device.getSid()} is long pressed`)

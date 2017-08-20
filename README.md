@@ -6,7 +6,7 @@ This node.js application is a bridge between the [Xiaomi Smart Home Gateway Aqua
 
 It's intended as a building block in heterogenous smart home environments where an MQTT message broker is used as the centralized message bus. See [MQTT Smarthome on Github](https://github.com/mqtt-smarthome/mqtt-smarthome) for a rationale and architectural overview.
 
-# Topics
+## Topics
 
 Every message starts with a prefix (see [config](#config)) that defaults to `xiaomi`. So if you change this all the topics change.
 
@@ -20,11 +20,14 @@ This bridge uses the `xiaomi/connected` topic to send retained connection messag
 
 ## Status messages
 
-The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields.
+The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields. The temperature/humidity sensor will be published to two topics.
 
-- `name` If you defined a name in the config
-- `val` current state of the device. (open/closed) for magnets. (clicked/doubleClicked/pressed/released) for buttons.
-- `state` also contains the state, but shouldn't be used anymore and will be removed soon.
+- `name` If you defined a name in the config.
+- `val` current state of the device.
+  - For magnets this will contain `open` or `closed`.
+  - For buttons this will contain `unknown`, `clicked`, `double_clicked`, `pressed` or `relesed`.
+  - For motion sensors this will be either `motion` or `no_motion`.
+- DEPRECATED `state` also contains the state, but shouldn't be used anymore and will be removed soon.
 - `ts` timestamp of last update.
 
 Each status message is retained, so if you subscribe after a status message, you will always get the last status.
@@ -49,16 +52,16 @@ You can control the gateway light (if you've set-up the password) by sending a m
 }
 ```
 
-# Config
+## Config
 
 Before you can actually use the Xiaomi gateway you'll have to configure it. You'll do this by setting the Mi Home application to `Chinese Mainland` (or else you cannot add the gateway).
 
-## Enable local network mode
+### Enable local network mode
 
 The gateway also needs to have Local network mode enabled. This can be done from within the application. 
 [How to enable network mode](./network_mode/README.md)
 
-## Installing everything
+### Installing everything
 
 You would typically run this app in the background, but first you have to configure it. You should first install [Node.JS](https://nodejs.org/en/download/).
 
@@ -93,6 +96,6 @@ You can also define names for the sensors here. These will be used in the json t
 
 Try to start the application by running `npm start` or directly by `node index.js`, and the topics should appear on your mqtt server.
 
-# Use [PM2](http://pm2.keymetrics.io) to run in background
+## Use [PM2](http://pm2.keymetrics.io) to run in background
 
 If everything works as expected, you should make the app run in the background automatically. Personally I use PM2 for this. And they have a great [guide for this](http://pm2.keymetrics.io/docs/usage/quick-start/).
