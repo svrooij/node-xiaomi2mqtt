@@ -82,11 +82,16 @@ function publishDeviceData (device, newState, secSinceMotion = 0) {
 
 let magnets = []
 function publishMagnetState (device, newState) {
-  const magnet = magnets.find(function (m) { return m.id === device.getSid() })
-  if (!magnet) {
+  const magnetIndex = magnets.findIndex(function (m) { return m.id === device.getSid() })
+
+  if (magnetIndex > -1) {
+    if (magnets[magnetIndex].state === newState) {
+      return
+    } else {
+      magnets[magnetIndex].state = newState
+    }
+  } else {
     magnets.push({id: device.getSid(), state: newState})
-  } else if (magnet.state === newState) {
-    return
   }
   publishDeviceData(device, newState)
 }
