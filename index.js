@@ -191,6 +191,12 @@ aqara.on('gateway', (gateway) => {
           publishHTSensor(device)
         })
         break
+      case 'leak':
+        publishDeviceData(device, `(${device.isLeaking() ? 'leaking' : 'not_leaking'})`)
+        device.on('update', () => {
+          publishDeviceData(device, `(${device.isLeaking() ? 'leaking' : 'not_leaking'})`)
+        })
+        break
     }
   })
 
