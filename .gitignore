@@ -57,6 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
-# Everything in the config directory except the default.json
-config/*
-!config/default.json
+.DS_Store

@@ -59,8 +59,8 @@ Before you can actually use the Xiaomi gateway you'll have to configure it. You'
 
 ### Enable local network mode
 
-The gateway also needs to have Local network mode enabled. This can be done from within the application. 
-[How to enable network mode](./network_mode/README.md)
+The gateway also needs to have Local network mode enabled. This can be done from within the application.
+[How to enable network mode](https://github.com/svrooij/node-xiaomi2mqtt/wiki/Network-mode-iOS)
 
 ### Installing everything
 
