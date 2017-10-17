@@ -67,7 +67,7 @@ function publishDeviceData (device, newState, secSinceMotion = 0) {
   let data = {
     val: newState, // Using val according to the MQTT Smarthome specs. State will be removed soon.
     state: newState,
-    battery: Math.round(device.getBatteryPercentage()),
+    battery: device.getBatteryPercentage(),
     name: getFriendlyName(device.getSid()),
     ts: Date.now()
   }
@@ -101,7 +101,7 @@ function publishHTSensor (sensorDevice) {
   const humTopic = `${mqttConfig.topic}status/humidity/${sensorDevice.getSid()}`
   let data = {
     val: sensorDevice.getTemperature(),
-    battery: Math.round(sensorDevice.getBatteryPercentage()),
+    battery: sensorDevice.getBatteryPercentage(),
     name: getFriendlyName(sensorDevice.getSid()),
     ts: Date.now()
   }
