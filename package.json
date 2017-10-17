@@ -1,14 +1,15 @@
 {
   "name": "xiaomi2mqtt",
-  "version": "0.1.2",
+  "version": "0.0.0-development",
   "description": "A bridge between the Xiaomi home-automation gateway and a MQTT server.",
   "main": "index.js",
   "scripts": {
-    "test": "standard && exit 0"
+    "test": "standard && exit 0",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/svrooij/node-xiaomi2mqtt.git"
+    "url": "https://github.com/svrooij/node-xiaomi2mqtt.git"
   },
   "keywords": [
     "mqtt",
@@ -28,6 +29,7 @@
     "mqtt": "^2.13.1"
   },
   "devDependencies": {
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "semantic-release": "^8.2.0"
   }
 }
