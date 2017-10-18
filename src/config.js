@@ -16,8 +16,6 @@ const config = require('yargs')
       n: 'name'
     })
     .default({
-      d: null,
-      g: null,
       l: 'info',
       m: 'mqtt://127.0.0.1',
       n: 'xiaomi'

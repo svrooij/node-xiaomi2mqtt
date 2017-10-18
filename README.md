@@ -7,53 +7,13 @@ This node.js application is a bridge between the [Xiaomi Smart Home Gateway Aqua
 
 It's intended as a building block in heterogenous smart home environments where an MQTT message broker is used as the centralized message bus. See [MQTT Smarthome on Github](https://github.com/mqtt-smarthome/mqtt-smarthome) for a rationale and architectural overview.
 
-## Topics
+## Installation
 
-Every message starts with a prefix (see [config](#config)) that defaults to `xiaomi`. So if you change this all the topics change.
+Using xiaomi2mqtt is really easy, but it requires at least [Node.js](https://nodejs.org/) v6 or higher. (This app is tested against v6 and v8).
 
-## Connect messages
+`sudo npm install -g xiaomi2mqtt`
 
-This bridge uses the `xiaomi/connected` topic to send retained connection messages. Use this topic to check your if your hue bridge is still running.
-
-- `0` or missing is not connected (set by will functionality).
-- `1` is connected to mqtt, but not to the xiaomi hardware.
-- `2` is connected to mqtt and xiaomi hardware. (ultimate success!)
-
-## Status messages
-
-The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields. The temperature/humidity sensor will be published to two topics.
-
-- `name` If you defined a name in the config.
-- `val` current state of the device.
-  - For magnets this will contain `open` or `closed`.
-  - For buttons this will contain `unknown`, `clicked`, `double_clicked`, `pressed` or `relesed`.
-  - For motion sensors this will be either `motion` or `no_motion`.
-- DEPRECATED `state` also contains the state, but shouldn't be used anymore and will be removed soon.
-- `ts` timestamp of last update.
-
-Each status message is retained, so if you subscribe after a status message, you will always get the last status.
-
-The statuses of the devices are multicasted over the network if you enbaled this (you SHOULD!!). So all the updates to mqtt are near instant.
-
-## Setting the gateway light
-
-You can control the gateway light (if you've set-up the password) by sending a message to `xiaomi/set/gateway/light`, send one of these:
-
-- a single brightness value. (Number between 0 and 100, 0 for off)
-- a json object containing (some of) the following properties:
-
-  - `intensity` brightness (0-100) (0 = off)
-  - `color` as json containing all 3 colors. `{ "r": 0-255, "g": 0-255, "b": 0-255 }`
-
-```
-// Sending this will result in a red light at 40% brightness
-{
-  "intensity": 40,
-  "color": {"r":255,"g":0,"b":0}
-}
-```
-
-## Config
+## Configure the gateway
 
 Before you can actually use the Xiaomi gateway you'll have to configure it. You'll do this by setting the Mi Home application to `Chinese Mainland` (or else you cannot add the gateway).
 
@@ -62,41 +22,102 @@ Before you can actually use the Xiaomi gateway you'll have to configure it. You'
 The gateway also needs to have Local network mode enabled. This can be done from within the application.
 [How to enable network mode](https://github.com/svrooij/node-xiaomi2mqtt/wiki/Network-mode-iOS)
 
-### Installing everything
-
-You would typically run this app in the background, but first you have to configure it. You should first install [Node.JS](https://nodejs.org/en/download/).
+## Usage
 
 ```bash
-git clone https://github.com/svrooij/node-xiaomi2mqtt.git xiaomi2mqtt
-cd xiaomi2mqtt
-npm install
-nano config/local.json
+Usage: xiaomi2mqtt [options]
+
+Options:
+  -d, --devices   File location of device list.
+  -g, --password  Gateway password (to enable gateway light change)
+  -h, --help      Show help
+  -l, --logging   possiblevalues: "error", "warn","info","debug"
+                  [default: "info"]
+  -m, --mqtt      mqtt broker url. See https://github.com/svrooij/node-xiaomi2mqtt#mqtt-url
+                  [default: "mqtt://127.0.0.1"]
+  -n, --name      instance name. used as mqtt client id and as topic prefix
+                  [default: "xiaomi"]
+  --version       Show version number
 ```
 
-You are now in the config file. Enter the following data as needed. See [mqtt.connect](https://www.npmjs.com/package/mqtt#connect) for options how to format the host. `mqtt://ip_address:1883` is the easiest.
+### MQTT Url
 
-You can also define names for the sensors here. These will be used in the json that is published to the mqtt server.
+Use the MQTT url to connect to your specific mqtt server. Check out [mqtt.connect](https://github.com/mqttjs/MQTT.js#connect) for the full description.
 
-```json
+```
+Connection without port (port 1883 gets used)
+[protocol]://[address] (eg. mqtt://127.0.0.1)
+
+Connection with port
+[protocol]://[address]:[port] (eg. mqtt://127.0.0.1:1883)
+
+Secure connection with username/password and port
+[protocol]://[username]:[password]@[address]:[port] (eg. mqtts://myuser:secretpassword@127.0.0.1:8883)
+```
+
+### Device list
+
+At this moment is seems impossible to retrieve the device name for all subdevices from the gateway. If you want to have decent names for your devices, you'll have to create a json file that looks like this, and tell xiaomi2mqtt to use it with the `-d [filename-here]` argument.
+
+```JSON
 {
-  "mqtt": {
-    "host":"mqtt://127.0.0.1:1883",
-    "user":null,
-    "password":null
-  },
-  "gateway":{
-      "password": "",
-      "devices": {
-        "device_sid":"Friendly Name"
-      }
-  }
+  "device_id": "Nice name",
+  "158d000aaa2888": "Bedroom window",
+  "158d000aaa5b35": "Frontdoor"
 }
 ```
 
-## Start the application
+## Topics
 
-Try to start the application by running `npm start` or directly by `node index.js`, and the topics should appear on your mqtt server.
+Every message starts with the instance name (specified with the `-n` argument), which defaults to `xiaomi` so we'll asume the default.
+
+### Connect messages
+
+This bridge uses the `xiaomi/connected` topic to send retained connection messages. Use this topic to check your if your hue bridge is still running.
+
+- `0` or missing is not connected (set by will functionality).
+- `1` is connected to mqtt, but not to the xiaomi hardware.
+- `2` is connected to mqtt and xiaomi hardware. (ultimate success!)
+
+### Status messages
+
+The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields.
+The temperature/humidity sensor will be published to two topics.
+
+- `name` If you defined a name in the config.
+- `battery` The calculated battery percentage of the sensor.
+- `val` current state of the device.
+  - For magnets this will contain `open` or `closed`.
+  - For buttons this will contain `unknown`, `clicked`, `double_clicked`, `pressed` or `relesed`.
+  - For motion sensors this will contain `motion` or `no_motion`.
+  - For leak sensors this will contain `leaking` or `not_leaking`
+- `ts` timestamp of last update.
+
+Each status message is retained, so if you subscribe after a status message, you will always get the last status.
+
+The statuses of the devices are multicasted over the network if you enbaled this (you SHOULD!!). So all the updates to mqtt are near instant.
+
+### Setting the gateway light
+
+You can control the gateway light (if you've set-up the gateway password) by sending a message to `xiaomi/set/gateway/light`, send one of these:
+
+- a single brightness value. (Number between 0 and 100, 0 for off)
+- a json object containing (some of) the following properties:
+  - `intensity` brightness (0-100) (0 = off)
+  - `color` as json containing all 3 colors. `{ "r": 0-255, "g": 0-255, "b": 0-255 }`
+
+```json
+// Sending this will result in a red light at 40% brightness
+{
+  "intensity": 40,
+  "color": {"r":255,"g":0,"b":0}
+}
+```
 
 ## Use [PM2](http://pm2.keymetrics.io) to run in background
 
 If everything works as expected, you should make the app run in the background automatically. Personally I use PM2 for this. And they have a great [guide for this](http://pm2.keymetrics.io/docs/usage/quick-start/).
+
+## Special thanks
+
+The latest version of this bridge is inspired on [hue2mqtt.js](https://github.com/hobbyquaker/hue2mqtt.js) by [Sabastian Raff](https://github.com/hobbyquaker). That was a great sample on how to create a globally installed, command-line, something2mqtt bridge.
