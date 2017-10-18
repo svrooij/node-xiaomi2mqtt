@@ -3,6 +3,9 @@
   "version": "0.0.0-development",
   "description": "A bridge between the Xiaomi home-automation gateway and a MQTT server.",
   "main": "index.js",
+  "bin": {
+    "xiaomi2mqtt": "index.js"
+  },
   "scripts": {
     "test": "standard && exit 0",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -30,7 +33,9 @@
     "yargs": "^9.0.1"
   },
   "devDependencies": {
-    "standard": "^10.0.3",
-    "semantic-release": "^8.2.0"
-  }
+    "pre-commit": "^1.2.2",
+    "semantic-release": "^8.2.0",
+    "standard": "^10.0.3"
+  },
+  "pre-commit": [ "test" ]
 }

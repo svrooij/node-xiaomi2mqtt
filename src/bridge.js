@@ -15,8 +15,8 @@ function start () {
   log._info(pkg.name + ' ' + pkg.version + ' starting')
 
   if (config.devices) {
-    fs.exists(config.devices, (exists) => {
-      if (exists) {
+    fs.access(config.devices, fs.constants.R_OK, (err) => {
+      if (!err) {
         log.info('Loading devices from: ' + config.devices)
         devices = require(config.devices)
       }
