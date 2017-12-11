@@ -132,6 +132,12 @@ function start () {
             publishDeviceData(device, `(${device.isLeaking() ? 'leaking' : 'not_leaking'})`)
           })
           break
+        case 'cube':
+          publishDeviceData(device, 'unknown')
+          device.on('update', () => {
+            publishDeviceData(device, device.getStatus(), 0, device.getRotateDegrees())
+          })
+          break
       }
     })
 
@@ -176,7 +182,7 @@ function publishConnectionStatus () {
   })
 }
 
-function publishDeviceData (device, newState, secSinceMotion = 0) {
+function publishDeviceData (device, newState, secSinceMotion = 0, rotation = null) {
   let data = {
     val: newState, // Using val according to the MQTT Smarthome specs.
     battery: device.getBatteryPercentage(),
@@ -184,6 +190,7 @@ function publishDeviceData (device, newState, secSinceMotion = 0) {
     ts: Date.now()
   }
   if (secSinceMotion > 0) { data.secondsSinceMotion = secSinceMotion }
+  if (rotation) { data.rotation = rotation }
   var topic = `${config.name}/status/${device.getType()}/${device.getSid()}`
   log.info(`Publishing ${newState} to ${topic}`)
   mqttClient.publish(topic,
