@@ -1,7 +1,7 @@
 const config = require('yargs')
     .env('XIAOMI2MQTT')
     .usage('Usage: $0 [options]')
-    .describe('d', 'File location of device list.')
+    .describe('d', 'File location of device list (must end with .json).')
     .describe('g', 'Gateway password (to enable gateway light change)')
     .describe('h', 'Show this help')
     .describe('l', 'possiblevalues: "error", "warn","info","debug"')

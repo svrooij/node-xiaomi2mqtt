@@ -28,7 +28,7 @@ The gateway also needs to have Local network mode enabled. This can be done from
 Usage: xiaomi2mqtt [options]
 
 Options:
-  -d, --devices   File location of device list.
+  -d, --devices   File location of device list (must end with .json).
   -g, --password  Gateway password (to enable gateway light change)
   -h, --help      Show help
   -l, --logging   possiblevalues: "error", "warn","info","debug"
@@ -57,7 +57,7 @@ Secure connection with username/password and port
 
 ### Device list
 
-At this moment is seems impossible to retrieve the device name for all subdevices from the gateway. If you want to have decent names for your devices, you'll have to create a json file that looks like this, and tell xiaomi2mqtt to use it with the `-d [filename-here]` argument.
+At this moment is seems impossible to retrieve the device name for all subdevices from the gateway. If you want to have decent names for your devices, you'll have to create a json file that looks like this, and tell xiaomi2mqtt to use it with the `-d [filename-here]` argument. [Apparently](https://github.com/svrooij/node-xiaomi2mqtt/issues/4#issuecomment-347706853) this file needs the be called `something.json`, because of the way it parses this file.
 
 ```JSON
 {
@@ -82,7 +82,7 @@ This bridge uses the `xiaomi/connected` topic to send retained connection messag
 ### Status messages
 
 The status of each device will be published to `xiaomi/status/[device_kind]/[device_id]` as a JSON object containing the following fields.
-The temperature/humidity sensor will be published to two topics.
+The temperature/humidity/pressure sensor will be published to three topics.
 
 - `name` If you defined a name in the config.
 - `battery` The calculated battery percentage of the sensor.
