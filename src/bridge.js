@@ -218,6 +218,7 @@ function publishMagnetState (device, newState) {
 function publishHTSensor (sensorDevice) {
   const tempTopic = `${config.name}/status/temperature/${sensorDevice.getSid()}`
   const humTopic = `${config.name}/status/humidity/${sensorDevice.getSid()}`
+  const presTopic = `${config.name}/status/pressure/${sensorDevice.getSid()}`
   let data = {
     val: sensorDevice.getTemperature(),
     battery: sensorDevice.getBatteryPercentage(),
@@ -233,6 +234,15 @@ function publishHTSensor (sensorDevice) {
     JSON.stringify(data),
     {qos: 0, retain: true}
   )
+
+  let pressure = sensorDevice.getPressure()
+  if (pressure !== null) {
+    data.val = pressure
+    mqttClient.publish(presTopic,
+      JSON.stringify(data),
+      {qos: 0, retain: true}
+    )
+  }
 }
 
 // Usefull function
