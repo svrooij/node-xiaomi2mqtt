@@ -18,7 +18,12 @@ function start () {
     fs.access(config.devices, fs.constants.R_OK, (err) => {
       if (!err) {
         log.info('Loading devices from: ' + config.devices)
-        devices = require(config.devices)
+        try {
+          devices = require(config.devices)
+        } catch(e){
+          log.error('Error loading devices: ',e)
+        }
+        
       }
     })
   }
