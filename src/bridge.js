@@ -20,10 +20,9 @@ function start () {
         log.info('Loading devices from: ' + config.devices)
         try {
           devices = require(config.devices)
-        } catch(e){
-          log.error('Error loading devices: ',e)
+        } catch (e) {
+          log.error('Error loading devices: ', e)
         }
-        
       }
     })
   }
