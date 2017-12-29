@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "standard && exit 0",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
@@ -30,12 +30,12 @@
     "lumi-aqara": "^1.4.0",
     "mqtt": "^2.15.0",
     "yalm": "^4.1.0",
-    "yargs": "^9.0.1"
+    "yargs": "^10.0.3"
   },
   "devDependencies": {
     "pre-commit": "^1.2.2",
-    "semantic-release": "^8.2.0",
-    "standard": "^10.0.3"
+    "semantic-release": "^11.0.2",
+    "standard": "^*"
   },
   "pre-commit": [
     "test"
