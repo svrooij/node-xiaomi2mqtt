@@ -1,11 +1,16 @@
 # Xiaomi2mqtt
 
 [![npm](https://img.shields.io/npm/v/xiaomi2mqtt.svg?style=flat-square)](https://www.npmjs.com/package/xiaomi2mqtt)
+[![travis](https://img.shields.io/travis/svrooij/xiaomi2mqtt.svg?style=flat-square)](https://travis-ci.org/svrooij/xiaomi2mqtt)
+[![Support me on Patreon][badge_patreon]][patreon]
+[![PayPal][badge_paypal_donate]][paypal-donations]
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
 This node.js application is a bridge between the [Xiaomi Smart Home Gateway Aquara](https://xiaomi-mi.com/mi-smart-home/xiaomi-mi-gateway-2/) and a mqtt server. The statuses off all the (sub)devices (door magnets & buttons) connected to this gateway will be published to the mqtt server.
 
 It's intended as a building block in heterogenous smart home environments where an MQTT message broker is used as the centralized message bus. See [MQTT Smarthome on Github](https://github.com/mqtt-smarthome/mqtt-smarthome) for a rationale and architectural overview.
+
+Check out the other bridges in the [software list](https://github.com/mqtt-smarthome/mqtt-smarthome/blob/master/Software.md)
 
 ## Installation
 
@@ -121,3 +126,12 @@ If everything works as expected, you should make the app run in the background a
 ## Special thanks
 
 The latest version of this bridge is inspired on [hue2mqtt.js](https://github.com/hobbyquaker/hue2mqtt.js) by [Sabastian Raff](https://github.com/hobbyquaker). That was a great sample on how to create a globally installed, command-line, something2mqtt bridge.
+
+## Beer
+
+This bridge took me quite some time, so I invite everyone using this bridge to [Buy me a beer](https://svrooij.nl/buy-me-a-beer/).
+
+[badge_paypal_donate]: https://svrooij.nl/badges/paypal_donate.svg
+[badge_patreon]: https://svrooij.nl/badges/patreon.svg
+[paypal-donations]: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=T9XFJYUSPE4SG
+[patreon]: https://www.patreon.com/svrooij
