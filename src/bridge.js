@@ -27,17 +27,14 @@ function start () {
     })
   }
 
-  let mqttOptions = {
+  const mqttOptions = {
     will: {
       topic: config.name + '/connected',
       message: 0,
       qos: 0,
       retain: true
-    }
-  }
-
-  if (config.insecure) {
-    mqttOptions.rejectUnauthorized = false
+    },
+    rejectUnauthorized = !config.insecure
   }
 
   mqttClient = mqtt.connect(config.mqtt, mqttOptions)
