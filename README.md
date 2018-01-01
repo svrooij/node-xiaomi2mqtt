@@ -36,10 +36,11 @@ Options:
   -d, --devices   File location of device list (must end with .json).
   -g, --password  Gateway password (to enable gateway light change)
   -h, --help      Show help
-  -l, --logging   possiblevalues: "error", "warn","info","debug"
-                  [default: "info"]
+  -l, --logging   Logging level  [choices: "error", "warn", "info", "debug"] [default: "info"]
   -m, --mqtt      mqtt broker url. See https://github.com/svrooij/node-xiaomi2mqtt#mqtt-url
                   [default: "mqtt://127.0.0.1"]
+  -k, --insecure  accept self singed-certificates when using TLS. See https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options  
+                  [boolean] [default: false]
   -n, --name      instance name. used as mqtt client id and as topic prefix
                   [default: "xiaomi"]
   --version       Show version number
