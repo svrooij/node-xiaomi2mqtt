@@ -34,7 +34,7 @@ function start () {
       qos: 0,
       retain: true
     },
-    rejectUnauthorized = !config.insecure
+    rejectUnauthorized: !config.insecure
   }
 
   mqttClient = mqtt.connect(config.mqtt, mqttOptions)
