@@ -6,9 +6,9 @@ const pkg = require('../package.json')
 const fs = require('fs')
 
 let mqttClient
-let lastGateway
 let aqara
 let devices
+let gateways = []
 
 function start () {
   log.setLevel(config.logging)
@@ -42,15 +42,16 @@ function start () {
   mqttClient.on('connect', () => {
     log.info('Connected to MQTT: %s', config.mqtt)
     publishConnectionStatus()
-    mqttClient.subscribe(config.name + '/set/gateway/light')
+    mqttClient.subscribe(config.name + '/set/+/light')
   })
 
   mqttClient.on('message', (topic, message) => {
-    var lastPart = topic.substr(topic.indexOf('/') + 1)
-    switch (lastPart) {
-      case 'set/gateway/light':
-        handleGatewayLightUpdate(message)
-        break
+    const parts = topic.split('/')
+    if (parts[1] === 'set' && parts[3] === 'light') {
+      const gateway = gateways[parts[2]]
+      if (gateway) {
+        handleGatewayLightUpdate(gateway, message)
+      }
     }
   })
 
@@ -73,17 +74,20 @@ function start () {
   aqara = new Aqara()
   aqara.on('gateway', (gateway) => {
     log.info('Gateway discovered')
-    lastGateway = gateway
+
     gateway.on('ready', () => {
-      log.info('Gateway ready')
+      log.info('Gateway %s ready', gateway._sid)
+      gateways[gateway._sid] = gateway
       publishConnectionStatus()
-      if (config.password) {
+      if (devices && devices.gateways && devices.gateways[gateway._sid]) {
+        gateway.setPassword(devices.gateways[gateway._sid])
+      } else if (config.password) {
         gateway.setPassword(config.password)
       }
     })
 
     gateway.on('offline', () => {
-      lastGateway = gateway = null
+      delete gateways[gateway._sid]
       log.warn('Gateway is offline')
       publishConnectionStatus()
     })
@@ -117,7 +121,7 @@ function start () {
           })
           break
         case 'motion':
-          publishDeviceData(device, `(${device.hasMotion() ? 'motion' : 'no_motion'})`, {lux: device.getLux()})
+          publishDeviceData(device, `${device.hasMotion() ? 'motion' : 'no_motion'}`, {lux: device.getLux()})
           device.on('motion', () => {
             publishDeviceData(device, 'motion', {lux: device.getLux()})
           })
@@ -152,35 +156,36 @@ function start () {
         state: state,
         ts: Date.now()
       }
-      mqttClient.publish(`${config.name}/status/gateway/light`,
+      const sid = gateway._sid
+      mqttClient.publish(`${config.name}/status/light/${sid}`,
           JSON.stringify(data),
           {qos: 0, retain: true})
     })
   })
 }
 
-function handleGatewayLightUpdate (message) {
-  if (!lastGateway) return
+function handleGatewayLightUpdate (gateway, message) {
+  if (!gateway) return
     // TODO send message to gateway.
   log.info('Updating gateway light')
   if (IsNumeric(message)) {
     var value = parseInt(message)
     if (value >= 0 && value <= 100) {
-      lastGateway.setIntensity(value)
+      gateway.setIntensity(value)
     } else {
       log.warn(`Value: ${value} not valid intensity!`)
     }
   } else { // Not numeric
     const data = JSON.parse(message)
     // TODO do something with the data.
-    lastGateway.setIntensity(data.intensity)
-    lastGateway.setColor(data.color)
+    gateway.setIntensity(data.intensity)
+    gateway.setColor(data.color)
   }
 }
 
 function publishConnectionStatus () {
   var status = '1'
-  if (lastGateway && lastGateway.ready) { status = '2' }
+  if (gateways.length > 0) { status = '2' }
   mqttClient.publish(config.name + '/connected', status, {
     qos: 0,
     retain: true

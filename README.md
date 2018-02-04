@@ -15,7 +15,7 @@ Check out the other bridges in the [software list](https://github.com/mqtt-smart
 
 ## Installation
 
-Using xiaomi2mqtt is really easy, but it requires at least [Node.js](https://nodejs.org/) v6 or higher. (This app is tested against v6 and v8).
+Using xiaomi2mqtt is really easy, but it requires at least [Node.js](https://nodejs.org/) v6 or higher. (This app is tested against v8 and v9).
 
 `sudo npm install -g xiaomi2mqtt`
 
@@ -35,23 +35,19 @@ Usage: xiaomi2mqtt [options]
 
 Options:
   -d, --devices   File location of device list (must end with .json).
-  -g, --password  Gateway password (to enable gateway light change)
-  -h, --help      Show help
+  -h, --help      Show help  [boolean]
   -l, --logging   Logging level  [choices: "error", "warn", "info", "debug"] [default: "info"]
-  -m, --mqtt      mqtt broker url. See https://github.com/svrooij/node-xiaomi2mqtt#mqtt-url
-                  [default: "mqtt://127.0.0.1"]
-  -k, --insecure  accept self singed-certificates when using TLS. See https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options  
-                  [boolean] [default: false]
-  -n, --name      instance name. used as mqtt client id and as topic prefix
-                  [default: "xiaomi"]
-  --version       Show version number
+  -m, --mqtt      mqtt broker url. See https://github.com/mqttjs/MQTT.js#connect-using-a-url  [default: "mqtt://127.0.0.1"]
+  -k, --insecure  accept self singed-certificates when using TLS. See https://github.com/mqttjs/MQTT.js#mqttclientstreambuilder-options  [boolean] [default: false]
+  -n, --name      instance name. used as mqtt client id and as topic prefix  [default: "xiaomi"]
+  --version       Show version number  [boolean]
 ```
 
 ### MQTT Url
 
 Use the MQTT url to connect to your specific mqtt server. Check out [mqtt.connect](https://github.com/mqttjs/MQTT.js#connect) for the full description.
 
-```
+```text
 Connection without port (port 1883 gets used)
 [protocol]://[address] (eg. mqtt://127.0.0.1)
 
@@ -66,11 +62,16 @@ Secure connection with username/password and port
 
 At this moment is seems impossible to retrieve the device name for all subdevices from the gateway. If you want to have decent names for your devices, you'll have to create a json file that looks like this, and tell xiaomi2mqtt to use it with the `-d [filename-here]` argument. [Apparently](https://github.com/svrooij/node-xiaomi2mqtt/issues/4#issuecomment-347706853) this file needs the be called `something.json`, because of the way it parses this file.
 
+This file can also be used to set the gateway password(s), in case you want to be able to set the lights.
+
 ```JSON
 {
   "device_id": "Nice name",
   "158d000aaa2888": "Bedroom window",
-  "158d000aaa5b35": "Frontdoor"
+  "158d000aaa5b35": "Frontdoor",
+  "gateways": {
+    "gateway_id": "password"
+  }
 }
 ```
 
@@ -106,7 +107,7 @@ The statuses of the devices are multicasted over the network if you enbaled this
 
 ### Setting the gateway light
 
-You can control the gateway light (if you've set-up the gateway password) by sending a message to `xiaomi/set/gateway/light`, send one of these:
+You can control the gateway light (if you've set-up the gateway password) by sending a message to `xiaomi/set/gateway_id/light`, send one of these:
 
 - a single brightness value. (Number between 0 and 100, 0 for off)
 - a json object containing (some of) the following properties:
