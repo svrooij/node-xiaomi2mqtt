@@ -28,13 +28,13 @@
   "homepage": "https://github.com/svrooij/node-xiaomi2mqtt#readme",
   "dependencies": {
     "lumi-aqara": "^1.4.0",
-    "mqtt": "^2.15.0",
+    "mqtt": "^2.15.1",
     "yalm": "^4.1.0",
-    "yargs": "^10.0.3"
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "pre-commit": "^1.2.2",
-    "semantic-release": "^11.0.2",
+    "semantic-release": "^12.4.1",
     "standard": "^*"
   },
   "pre-commit": [
