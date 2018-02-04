@@ -117,12 +117,12 @@ function start () {
           })
           break
         case 'motion':
-          publishDeviceData(device, `(${device.hasMotion() ? 'motion' : 'no_motion'})`)
+          publishDeviceData(device, `(${device.hasMotion() ? 'motion' : 'no_motion'})`, {lux: device.getLux()})
           device.on('motion', () => {
-            publishDeviceData(device, 'motion')
+            publishDeviceData(device, 'motion', {lux: device.getLux()})
           })
           device.on('noMotion', () => {
-            publishDeviceData(device, 'no_motion', device.getSecondsSinceMotion())
+            publishDeviceData(device, 'no_motion', { secondsSinceMotion: device.getSecondsSinceMotion(), lux: device.getLux() })
           })
           break
         case 'sensor':
@@ -140,7 +140,7 @@ function start () {
         case 'cube':
           publishDeviceData(device, 'unknown')
           device.on('update', () => {
-            publishDeviceData(device, device.getStatus(), 0, device.getRotateDegrees())
+            publishDeviceData(device, device.getStatus(), {rotation: device.getRotateDegrees()})
           })
           break
       }
@@ -187,15 +187,15 @@ function publishConnectionStatus () {
   })
 }
 
-function publishDeviceData (device, newState, secSinceMotion = 0, rotation = null) {
+function publishDeviceData (device, newState, extraData = {}) {
   let data = {
     val: newState, // Using val according to the MQTT Smarthome specs.
     battery: device.getBatteryPercentage(),
     name: getFriendlyName(device.getSid()),
     ts: Date.now()
   }
-  if (secSinceMotion > 0) { data.secondsSinceMotion = secSinceMotion }
-  if (rotation) { data.rotation = rotation }
+
+  Object.assign(data, extraData)
   var topic = `${config.name}/status/${device.getType()}/${device.getSid()}`
   log.info(`Publishing ${newState} to ${topic}`)
   mqttClient.publish(topic,
