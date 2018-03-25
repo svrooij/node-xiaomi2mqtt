@@ -158,15 +158,15 @@ function start () {
       }
       const sid = gateway._sid
       mqttClient.publish(`${config.name}/status/light/${sid}`,
-          JSON.stringify(data),
-          {qos: 0, retain: true})
+        JSON.stringify(data),
+        {qos: 0, retain: true})
     })
   })
 }
 
 function handleGatewayLightUpdate (gateway, message) {
   if (!gateway) return
-    // TODO send message to gateway.
+  // TODO send message to gateway.
   log.info('Updating gateway light')
   if (IsNumeric(message)) {
     var value = parseInt(message)
@@ -204,9 +204,9 @@ function publishDeviceData (device, newState, extraData = {}) {
   var topic = `${config.name}/status/${device.getType()}/${device.getSid()}`
   log.info(`Publishing ${newState} to ${topic}`)
   mqttClient.publish(topic,
-        JSON.stringify(data),
-        {qos: 0, retain: true}
-    )
+    JSON.stringify(data),
+    {qos: 0, retain: true}
+  )
 }
 
 let magnets = []
