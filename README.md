@@ -105,6 +105,14 @@ Each status message is retained, so if you subscribe after a status message, you
 
 The statuses of the devices are multicasted over the network if you enbaled this (you SHOULD!!). So all the updates to mqtt are near instant.
 
+### Security message
+
+The total count of magnet sensors with the `open` state will be emitted to: `xiaomi/status/magnets` as a JSON object containing the following fields.
+
+- `name` Either `All closed` or comma seperated list of magnet names with open status.
+- `ids` the ids of the magnets with the status `open` as array.
+- `val` number of open devices
+
 ### Setting the gateway light
 
 You can control the gateway light (if you've set-up the gateway password) by sending a message to `xiaomi/set/gateway_id/light`, send one of these:

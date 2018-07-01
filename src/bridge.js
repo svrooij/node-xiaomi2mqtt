@@ -223,6 +223,21 @@ function publishMagnetState (device, newState) {
     magnets.push({id: device.getSid(), state: newState})
   }
   publishDeviceData(device, newState)
+  publishOpenMagnetCount()
+}
+
+function publishOpenMagnetCount () {
+  const openMagnets = magnets.filter(m => m.state === 'open')
+  let data = {
+    val: openMagnets.length,
+    name: 'All closed',
+    ts: Date.now()
+  }
+  if (openMagnets.length > 0) {
+    data.ids = openMagnets.map(m => m.id)
+    data.name = openMagnets.map(m => getFriendlyName(m.id)).sort().join(', ')
+  }
+  mqttClient.publish(`${config.name}/status/magnets`, JSON.stringify(data), {qos: 0, retain: true})
 }
 
 function publishHTSensor (sensorDevice) {
