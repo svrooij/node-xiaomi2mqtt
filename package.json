@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/svrooij/node-xiaomi2mqtt#readme",
   "dependencies": {
-    "lumi-aqara": "^1.4.0",
-    "mqtt": "^2.17.0",
+    "lumi-aqara": "^1.6.0",
+    "mqtt": "^2.18.2",
     "yalm": "^4.1.0",
     "yargs": "^11.1.0"
   },
