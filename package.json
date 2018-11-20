@@ -33,9 +33,9 @@
     "yargs": "^11.1.0"
   },
   "devDependencies": {
-    "pre-commit": "^1.2.2",
-    "semantic-release": "^15.1.4",
-    "standard": "^11.0.1"
+    "pre-commit": "1.2.2",
+    "semantic-release": "15.1.4",
+    "standard": "11.0.1"
   },
   "pre-commit": [
     "test"
