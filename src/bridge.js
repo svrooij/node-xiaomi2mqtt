@@ -121,9 +121,9 @@ function start () {
           })
           break
         case 'motion':
-          publishDeviceData(device, `${device.hasMotion() ? 'motion' : 'no_motion'}`, {lux: device.getLux()})
+          publishDeviceData(device, `${device.hasMotion() ? 'motion' : 'no_motion'}`, { lux: device.getLux() })
           device.on('motion', () => {
-            publishDeviceData(device, 'motion', {lux: device.getLux()})
+            publishDeviceData(device, 'motion', { lux: device.getLux() })
           })
           device.on('noMotion', () => {
             publishDeviceData(device, 'no_motion', { secondsSinceMotion: device.getSecondsSinceMotion(), lux: device.getLux() })
@@ -144,7 +144,7 @@ function start () {
         case 'cube':
           publishDeviceData(device, 'unknown')
           device.on('update', () => {
-            publishDeviceData(device, device.getStatus(), {rotation: device.getRotateDegrees()})
+            publishDeviceData(device, device.getStatus(), { rotation: device.getRotateDegrees() })
           })
           break
       }
@@ -159,7 +159,7 @@ function start () {
       const sid = gateway._sid
       mqttClient.publish(`${config.name}/status/light/${sid}`,
         JSON.stringify(data),
-        {qos: 0, retain: true})
+        { qos: 0, retain: true })
     })
   })
 }
@@ -205,7 +205,7 @@ function publishDeviceData (device, newState, extraData = {}) {
   log.info(`Publishing ${newState} to ${topic}`)
   mqttClient.publish(topic,
     JSON.stringify(data),
-    {qos: 0, retain: true}
+    { qos: 0, retain: true }
   )
 }
 
@@ -220,7 +220,7 @@ function publishMagnetState (device, newState) {
       magnets[magnetIndex].state = newState
     }
   } else {
-    magnets.push({id: device.getSid(), state: newState})
+    magnets.push({ id: device.getSid(), state: newState })
   }
   publishDeviceData(device, newState)
   publishOpenMagnetCount()
@@ -237,7 +237,7 @@ function publishOpenMagnetCount () {
     data.ids = openMagnets.map(m => m.id)
     data.name = openMagnets.map(m => getFriendlyName(m.id)).sort().join(', ')
   }
-  mqttClient.publish(`${config.name}/status/magnets`, JSON.stringify(data), {qos: 0, retain: true})
+  mqttClient.publish(`${config.name}/status/magnets`, JSON.stringify(data), { qos: 0, retain: true })
 }
 
 function publishHTSensor (sensorDevice) {
@@ -252,12 +252,12 @@ function publishHTSensor (sensorDevice) {
   }
   mqttClient.publish(tempTopic,
     JSON.stringify(data),
-    {qos: 0, retain: true}
+    { qos: 0, retain: true }
   )
   data.val = sensorDevice.getHumidity()
   mqttClient.publish(humTopic,
     JSON.stringify(data),
-    {qos: 0, retain: true}
+    { qos: 0, retain: true }
   )
 
   let pressure = sensorDevice.getPressure()
@@ -265,7 +265,7 @@ function publishHTSensor (sensorDevice) {
     data.val = pressure
     mqttClient.publish(presTopic,
       JSON.stringify(data),
-      {qos: 0, retain: true}
+      { qos: 0, retain: true }
     )
   }
 }
