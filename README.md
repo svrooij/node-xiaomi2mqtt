@@ -1,5 +1,7 @@
 # Xiaomi2mqtt
 
+**Looking for maintainers**, I moved to [Zigbee2mqtt](https://www.zigbee2mqtt.io/) and got rid of my Chinese xioami gateway (I can recomment this to everybody). So I'm no longer actively using the gateway. If someone else wants to maintain this library I'll grant you the rights to the repo and the NPM package.
+
 [![npm](https://img.shields.io/npm/v/xiaomi2mqtt.svg?style=flat-square)](https://www.npmjs.com/package/xiaomi2mqtt)
 [![travis](https://img.shields.io/travis/svrooij/node-xiaomi2mqtt.svg?style=flat-square)](https://travis-ci.org/svrooij/node-xiaomi2mqtt)
 [![mqtt-smarthome](https://img.shields.io/badge/mqtt-smarthome-blue.svg?style=flat-square)](https://github.com/mqtt-smarthome/mqtt-smarthome)
